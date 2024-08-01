@@ -58,9 +58,9 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> MySQLConnection:
     """ get db function that return a db"""
-    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', 'root')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD')
+    host = os.getenv('PERSONAL_DATA_DB_HOST')
     db_name = os.getenv('PERSONAL_DATA_DB_NAME')
 
     if not db_name:
@@ -74,3 +74,22 @@ def get_db() -> MySQLConnection:
     )
 
     return connection
+
+
+def main():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    field_names = [i[0] for i in cursor.description]
+
+    logger = get_logger()
+
+    for row in cursor:
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
+
+    cursor.close()
+    db.close()
+
+if __name__ == "__main__":
+    main()
