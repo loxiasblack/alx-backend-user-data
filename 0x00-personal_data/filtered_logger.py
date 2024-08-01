@@ -3,6 +3,9 @@
 from typing import List
 import re
 import logging
+import os
+from mysql.connector import MySQLConnection
+import mysql.connector
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -51,3 +54,23 @@ def get_logger() -> logging.Logger:
 
     logger.addHandler(console_handler)
     return logger
+
+
+def get_db() -> MySQLConnection:
+    """ get db function that return a db"""
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+
+    if not db_name:
+        raise ValueError("Database name not provided in environment variables")
+
+    connection = mysql.connector.connect(
+        username=username,
+        password=password,
+        host=host,
+        database=db_name
+    )
+
+    return connection
