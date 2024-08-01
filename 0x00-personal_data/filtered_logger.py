@@ -4,6 +4,8 @@ from typing import List
 import re
 import logging
 
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
 
 def filter_datum(fields: List[str],
                  redaction: str, message: str,
@@ -30,3 +32,22 @@ class RedactingFormatter(logging.Formatter):
         """ format function that return format """
         return filter_datum(self.fields, self.REDACTION,
                             super().format(record), self.SEPARATOR)
+
+
+def get_logger() -> logging.Logger:
+    """ Create function get_logger
+        goal is to display logging info about
+        the app in the console with the formatted class
+        created above """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    fromatter = RedactingFormatter(fields=PII_FIELDS)
+    console_handler.setFormatter(fromatter)
+
+    logger.addHandler(console_handler)
+    return logger
