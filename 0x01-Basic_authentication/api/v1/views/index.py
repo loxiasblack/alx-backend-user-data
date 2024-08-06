@@ -32,7 +32,7 @@ def unauthorized() -> str:
     Retrun:
       - abort 401
     """
-    abort(401)
+    return abort(401)
 
 
 @app_views.route('/forbidden', strict_slashes=False)
