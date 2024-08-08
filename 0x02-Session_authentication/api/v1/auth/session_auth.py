@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ new session Auth """
 from api.v1.auth.auth import Auth
+from models.user import User
 from uuid import uuid4
 
 
@@ -25,3 +26,10 @@ class SessionAuth(Auth):
         if not isinstance(session_id, str):
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """ current user method"""
+        session_id = self.session_cookie(request)
+        user_id_for_session = self.user_id_for_session_id(session_id)
+        current_user = User.get(user_id_for_session)
+        return current_user
