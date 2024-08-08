@@ -37,7 +37,13 @@ class Auth:
 
     def session_cookie(self, request=None):
         """ session cookie method """
+        session_name = os.getenv("SESSION_NAME")
+
         if request is None:
             return None
+
+        if session_name is None:
+            return None
+
         if os.getenv("SESSION_NAME") == "_my_session_id":
             return request.cookies.get("_my_session_id")
