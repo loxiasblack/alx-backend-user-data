@@ -34,7 +34,6 @@ if auth:
             '/api/v1/auth_session/login/',
             ]
         authoriztion = auth.require_auth(request.path, list_of_paths)
-        request.current_user = auth.current_user(request)
         if not authoriztion:
             return
         if auth.authorization_header(request) is None:
@@ -43,6 +42,7 @@ if auth:
             abort(401)
         if auth.current_user(request) is None:
             abort(403)
+        request.current_user = auth.current_user(request)
 
 
 @app.errorhandler(404)
