@@ -62,5 +62,7 @@ class DB():
             if not hasattr(user, key):
                 raise ValueError
             setattr(user, key, value)
-        self.__session.commit()
-        print(user.hashed_password)
+        try:
+            self._session.commit()
+        except InvalidRequestError:
+            raise ValueError("Invalid Request")
