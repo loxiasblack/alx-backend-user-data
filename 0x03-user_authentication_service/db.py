@@ -45,7 +45,7 @@ class DB():
         """ method that found the user row or
             - raise [NoResultFound, InvalidRequest]"""
         try:
-            user = self.__session.query(User).filter_by(**kwargs).first()
+            user = self._session.query(User).filter_by(**kwargs).first()
             if user is None:
                 raise NoResultFound
             return user
@@ -56,8 +56,8 @@ class DB():
         """ Update the user"""
 
         user = self.find_user_by(id=user_id)
-        if user is None:
-            raise None
+        if not user:
+            return None
         for key, value in kwargs.items():
             if not hasattr(user, key):
                 raise ValueError
