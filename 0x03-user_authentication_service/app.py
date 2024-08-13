@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ app flak """
 
-from flask import Flask, jsonify, request, abort, redirect
+from flask import Flask, jsonify, request, abort, redirect, url_for
 from sqlalchemy.orm.exc import NoResultFound
 from auth import Auth
 
@@ -54,7 +54,7 @@ def login():
 
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
-def logout() -> str:
+def logout():
     """ logout and delete the session_id """
     if request.method == "DELETE":
         # Correctly retrieve the session_id from the cookies
@@ -64,11 +64,11 @@ def logout() -> str:
         # Try to find the user associated with the session_id
         user = AUTH.get_user_from_session_id(session_id)
         if not user:
-            return redirect("/"), 403
+            abort(403)
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user_id=user.id)
         # redirect to the root
-        return redirect("/")
+        return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
