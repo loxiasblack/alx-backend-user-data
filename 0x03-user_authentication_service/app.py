@@ -54,22 +54,23 @@ def login():
 
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
-def logout():
+def logout() -> str:
+    """ logout and delete the session_id """
     if request.method == "DELETE":
         # Correctly retrieve the session_id from the cookies
         session_id = request.cookies.get("session_id")
-        
+
         if session_id is None:
             # If session_id is missing, abort with a 403 status
             abort(403)
 
         # Try to find the user associated with the session_id
         user = AUTH.get_user_from_session_id(session_id)
-        
+
         if user is None:
             # If no user is found, abort with a 403 status
             abort(403)
-        
+
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user_id=user.id)
         return redirect("/")
