@@ -63,7 +63,8 @@ def logout() -> str:
             abort(403)
         # Try to find the user associated with the session_id
         user = AUTH.get_user_from_session_id(session_id)
-
+        if not user:
+            return redirect("/"), 403
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user_id=user.id)
         # redirect to the root
