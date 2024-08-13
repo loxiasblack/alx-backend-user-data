@@ -56,19 +56,28 @@ def login():
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
     """ logout and delete the session_id """
-    if request.method == "DELETE":
-        # Correctly retrieve the session_id from the cookies
-        session_id = request.cookies.get("session_id")
-        if not session_id:
-            abort(403)
-        # Try to find the user associated with the session_id
-        user = AUTH.get_user_from_session_id(session_id)
-        if not user:
-            abort(403)
-        # Destroy the session and redirect to the homepage
-        AUTH.destroy_session(user.id)
-        # redirect to the root
-        return redirect(url_for("index"))
+    # Correctly retrieve the session_id from the cookies
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        abort(403)
+    # Try to find the user associated with the session_id
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    # Destroy the session and redirect to the homepage
+    AUTH.destroy_session(user.id)
+    # redirect to the root
+    return redirect(url_for("index"))
+
+
+@app.route("/profile", methods=["GET"], strict_slashes=False)
+def profile() -> str:
+    """ return the profile"""
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    return jsonify({"email": user.email}), 200
 
 
 if __name__ == "__main__":
