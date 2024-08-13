@@ -97,6 +97,25 @@ def get_reset_password_token() -> str:
         return jsonify({"email": request.form["email"], "reset_token": token})
 
 
+@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
+def update_password():
+    """ update the password """
+    # check if the request is PUT
+    if request.method == "PUT":
+        try:
+            # update the password from the form
+            AUTH.update_password(
+                request.form["reset_token"], request.form["new_password"]
+                )
+        except ValueError:
+            # if the reset_token is invalid abort
+            abort(403)
+        # return the message showing that the pass has been updated
+        return jsonify(
+            {"email": request.form["email"], "message": "Password updated"}
+            ), 200
+
+
 if __name__ == "__main__":
     """ run the flask """
     app.run(host='0.0.0.0', port="5000")
