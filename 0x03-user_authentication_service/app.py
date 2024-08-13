@@ -60,10 +60,6 @@ def logout() -> str:
         # Correctly retrieve the session_id from the cookies
         session_id = request.cookies.get("session_id")
 
-        if session_id is None:
-            # If session_id is missing, abort with a 403 status
-            abort(403)
-
         # Try to find the user associated with the session_id
         user = AUTH.get_user_from_session_id(session_id)
 
@@ -73,6 +69,7 @@ def logout() -> str:
 
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user_id=user.id)
+        # redirect to the root home
         return redirect("/")
 
 
