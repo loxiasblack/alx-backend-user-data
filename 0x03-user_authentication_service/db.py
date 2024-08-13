@@ -54,11 +54,12 @@ class DB():
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """ Update the user"""
-        try:
-            user = self.find_user_by(id=user_id)
 
-            self.__session.query(User).filter_by(id=user_id).update(kwargs)
-            self.__session.commit()
-            return None
-        except ValueError:
-            raise
+        user = self.find_user_by(id=user_id)
+
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, value)
+        self.__session.commit()
+        print(user.hashed_password)
