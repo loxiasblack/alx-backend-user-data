@@ -83,6 +83,20 @@ def profile() -> str:
     return jsonify({"email": f"{user.email}"}), 200
 
 
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def get_reset_password_token() -> str:
+    """ reset a password of token """
+    # check if request is POST
+    if request.method == "POST":
+        try:
+            # get token rest and check if the email is already register
+            token = AUTH.get_reset_password_token(email=request.form["email"])
+        except ValueError:
+            # abort if not 403 forbidden
+            abort(403)
+        return jsonify({"email": request.form["email"], "reset_token": token})
+
+
 if __name__ == "__main__":
     """ run the flask """
     app.run(host='0.0.0.0', port="5000")
