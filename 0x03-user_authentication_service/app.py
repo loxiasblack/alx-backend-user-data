@@ -80,7 +80,7 @@ def profile() -> str:
     user = AUTH.get_user_from_session_id(session_id)
     if not user:
         abort(403)
-    return jsonify({"email": user.email}), 200
+    return jsonify({"email": f"{user.email}"}), 200
 
 
 if __name__ == "__main__":
