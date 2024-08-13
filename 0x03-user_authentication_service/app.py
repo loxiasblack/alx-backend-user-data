@@ -66,7 +66,7 @@ def logout() -> str:
 
         if not user:
             # If no user is found, abort with a 403 status
-            return jsonify({}), 403
+            return 403
 
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user_id=user.id)
