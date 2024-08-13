@@ -61,14 +61,14 @@ def logout():
         
         if session_id is None:
             # If session_id is missing, abort with a 403 status
-            abort(403)
+            return 403
 
         # Try to find the user associated with the session_id
         user = AUTH.get_user_from_session_id(session_id)
         
         if user is None:
             # If no user is found, abort with a 403 status
-            abort(403)
+            return 403
         
         # Destroy the session and redirect to the homepage
         AUTH.destroy_session(user.id)
