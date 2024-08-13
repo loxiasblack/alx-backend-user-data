@@ -56,7 +56,8 @@ class DB():
         """ Update the user"""
 
         user = self.find_user_by(id=user_id)
-
+        if user is None:
+            raise None
         for key, value in kwargs.items():
             if not hasattr(user, key):
                 raise ValueError
