@@ -60,12 +60,13 @@ def logout() -> str:
     with session_id if existing destroy's the session, redirects
     to index and if doesn't exist raise a 403 error
     """
-    session_id = request.cookies.get("session_id")
-    user = AUTH.get_user_from_session_id(session_id)
-    if user:
-        AUTH.destroy_session(user.id)
-        return redirect(url_for('/'))
-    abort(403)
+    if request.method == "DELETE":
+        session_id = request.cookies.get("session_id")
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            AUTH.destroy_session(user.id)
+            return redirect(url_for('/'))
+        abort(403)
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
