@@ -53,20 +53,21 @@ def login():
         return json_response
 
 
-@app.route('/sessions', methods=['DELETE'])
-def logout() -> str:
-    """
-    Gets request from request cookies finds user associated
-    with session_id if existing destroy's the session, redirects
-    to index and if doesn't exist raise a 403 error
-    """
-    if request.method == "DELETE":
-        session_id = request.cookies.get("session_id")
-        user = AUTH.get_user_from_session_id(session_id)
-        if user:
-            AUTH.destroy_session(user.id)
-            return redirect(url_for('/'))
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
+def logout():
+    """ logout and delete the session_id """
+    # Correctly retrieve the session_id from the cookies
+    session_id = request.cookies.get("session_id")
+    if not session_id:
         abort(403)
+    # Try to find the user associated with the session_id
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    # Destroy the session and redirect to the homepage
+    AUTH.destroy_session(user.id)
+    # redirect to the root
+    return redirect(url_for("/"))
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
