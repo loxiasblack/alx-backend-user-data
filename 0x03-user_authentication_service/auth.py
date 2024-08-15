@@ -65,10 +65,15 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """ get user from he's session """
-        try:
-            user = self._db.find_user_by(session_id=session_id)
-        except NoResultFound:
+        
+        # check the user by his session_id
+        user = self._db.find_user_by(session_id=session_id)
+
+        # tell if it's exist        
+        if not user:
             return None
+        # return the value if the user is already exist
+
         return user
 
     def destroy_session(self, user_id: int) -> None:
