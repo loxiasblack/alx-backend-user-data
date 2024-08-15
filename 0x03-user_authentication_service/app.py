@@ -56,13 +56,14 @@ def login():
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
     """ logout and delete the session_id """
-    user = AUTH.get_user_from_session_id(request.cookies.get("session_id"))
+    session = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session)
     if not user:
         abort(403)
     # Destroy the session and redirect to the homepage
     AUTH.destroy_session(user.id)
     # redirect to the root
-    return redirect(url_for('index'), code=301)
+    return redirect(url_for('index'))
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
