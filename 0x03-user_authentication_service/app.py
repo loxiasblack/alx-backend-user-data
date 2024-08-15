@@ -65,12 +65,14 @@ def logout():
     # Destroy the session and redirect to the homepage
     AUTH.destroy_session(user.id)
     # redirect to the root
-    return redirect('/'), 301
+    return redirect('/')
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
 def profile() -> str:
-    """ return the profile"""
+    """ check from the profile of the user
+        -Return the user email in json"""
+
     session_id = request.cookies.get("session_id")
     if not session_id:
         abort(403)
