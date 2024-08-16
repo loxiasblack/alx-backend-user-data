@@ -60,12 +60,11 @@ def logout():
     if not session:
         abort(403)
     user = AUTH.get_user_from_session_id(session)
-    if not user:
-        abort(403)
-    # Destroy the session and redirect to the homepage
-    AUTH.destroy_session(user.id)
-    # redirect to the root
-    return redirect("/"), 302
+    if user:
+        # Destroy the session and redirect to the homepage
+        AUTH.destroy_session(user.id)
+    # redirect to the home page
+    return redirect('/')
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
