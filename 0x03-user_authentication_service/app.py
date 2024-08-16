@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 @app.route("/", methods=["GET"])
-def index():
+def home():
     """ return the follow message """
     return jsonify({"message": "Bienvenue"})
 
@@ -65,7 +65,7 @@ def logout():
     # Destroy the session and redirect to the homepage
     AUTH.destroy_session(user.id)
     # redirect to the root
-    return redirect('/')
+    return redirect(url_for("home"))
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
