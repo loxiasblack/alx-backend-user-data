@@ -65,7 +65,7 @@ def logout():
     # Destroy the session and redirect to the homepage
     AUTH.destroy_session(user.id)
     # redirect to the root
-    return redirect(url_for("home"))
+    return redirect(url_for("home"), code= 302)
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
