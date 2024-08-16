@@ -53,7 +53,7 @@ def login():
         return json_response
 
 
-@app.route("/sessions", methods=["DELETE", "POST"], strict_slashes=False)
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
     """ logout and delete the session_id """
     session = request.cookies.get("session_id")
@@ -65,7 +65,7 @@ def logout():
     # Destroy the session and redirect to the homepage
     AUTH.destroy_session(user.id)
     # redirect to the root
-    return redirect(url_for("home"), code=302)
+    return redirect("/"), 302
 
 
 @app.route("/profile", methods=["GET"], strict_slashes=False)
